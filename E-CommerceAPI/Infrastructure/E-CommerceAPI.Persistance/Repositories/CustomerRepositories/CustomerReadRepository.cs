@@ -12,7 +12,7 @@ namespace E_CommerceAPI.Persistance.Repositories.CustomerRepositories
     public class CustomerReadRepository : ReadRepository<Customer>, ICustomerReadRepository
     {
         public CustomerReadRepository(ECommerceAPIDbContext _context) : base(_context)
-        {
+        { 
         }
     }
 }
