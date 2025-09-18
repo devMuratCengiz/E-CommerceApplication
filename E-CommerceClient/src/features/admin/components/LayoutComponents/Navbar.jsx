@@ -27,6 +27,9 @@ function AdminNavbar() {
                     <Button color="inherit" component={Link} to="/admin/customer">
                         Customer
                     </Button>
+                    <Button color="inherit" component={Link} to="/admin/order">
+                        Order
+                    </Button>
                     <Button color="inherit" component={Link} to="/">
                         Go to Site
                     </Button>

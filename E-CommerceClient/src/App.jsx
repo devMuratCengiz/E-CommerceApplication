@@ -8,8 +8,10 @@ import MainLayout from "./features/ui/layouts/MainLayout";
 import AdminProduct from "./features/admin/pages/Product";
 import AdminBasket from "./features/admin/pages/Basket";
 import AdminCustomer from "./features/admin/pages/Customer";
+import AdminOrder from "./features/admin/pages/Order";
 import AdminHome from "./features/admin/pages/Home";
 import AdminLayout from "./features/admin/layouts/AdminLayout";
+
 
 
 
@@ -28,6 +30,7 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="home" index element={<AdminHome />} />
           <Route path="product" element={<AdminProduct />} />
+          <Route path="order" element={<AdminOrder />} />
           <Route path="basket" element={<AdminBasket />} />
           <Route path="customer" element={<AdminCustomer />} />
         </Route>
