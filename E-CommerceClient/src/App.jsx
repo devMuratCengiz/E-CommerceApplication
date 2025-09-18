@@ -19,7 +19,8 @@ function App() {
       <Routes>
         {/* UI Layout */}
         <Route path="/" element={<MainLayout />}>
-          <Route path="home" index element={<Home />} /> {/* / */}
+          <Route index element={<Home />} /> {/* / */}
+          <Route path="home" element={<Home />} />
           <Route path="product" element={<Product />} /> {/* /products */}
           <Route path="basket" element={<Basket />} /> {/* /products */}
         </Route>
