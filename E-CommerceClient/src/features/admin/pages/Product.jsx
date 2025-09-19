@@ -16,11 +16,16 @@ import {
     TableRow,
     TableCell,
     Paper,
+    TablePagination,
 } from "@mui/material";
 
 function Product() {
     const [products, setProducts] = useState([]);
     const [form, setForm] = useState({ name: "", stock: 0, price: 0 });
+
+    // Pagination state
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     useEffect(() => {
         fetchProducts();
@@ -42,7 +47,7 @@ function Product() {
         e.preventDefault();
 
         if (!form.name || form.stock < 0 || form.price < 0) {
-            alertify.set('notifier', 'position', 'top-left');
+            alertify.set("notifier", "position", "top-left");
             alertify.error("Please fill all fields correctly!");
             return;
         }
@@ -53,21 +58,37 @@ function Product() {
                 fetchProducts();
                 setForm({ name: "", stock: 0, price: 0 });
 
-                alertify.set('notifier', 'position', 'top-right');
+                alertify.set("notifier", "position", "top-right");
                 alertify.success("Product added successfully!");
             })
             .catch((err) => {
                 console.error(err);
-                alertify.set('notifier', 'position', 'top-left');
+                alertify.set("notifier", "position", "top-left");
                 alertify.error("Failed to add product!");
             });
+    };
+
+    // Pagination handlers
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    // Tarih formatlama
+    const formatDate = (dateString) => {
+        if (!dateString) return "-";
+        return new Date(dateString).toLocaleString(); // örn: 19.09.2025 17:45:30
     };
 
     return (
         <Grid container spacing={3} sx={{ mt: 2 }}>
             {/* Left side - Form */}
-            <Grid item xs={12} sx={{ flex: 4, display: 'flex' }}>
-                <Card elevation={3} sx={{ width: '100%' }}>
+            <Grid item xs={12} sx={{ flex: 4, display: "flex" }}>
+                <Card elevation={3} sx={{ width: "100%" }}>
                     <CardContent>
                         <Typography variant="h6" gutterBottom>
                             Add New Product
@@ -91,7 +112,7 @@ function Product() {
                                 onChange={handleChange}
                                 slotProps={{
                                     input: {
-                                        min: 0, // negatif değer engeli
+                                        min: 0,
                                     },
                                 }}
                             />
@@ -105,7 +126,7 @@ function Product() {
                                 onChange={handleChange}
                                 slotProps={{
                                     input: {
-                                        min: 0, // negatif değer engeli
+                                        min: 0,
                                     },
                                 }}
                             />
@@ -124,8 +145,8 @@ function Product() {
             </Grid>
 
             {/* Right side - Product List */}
-            <Grid item xs={12} sx={{ flex: 8, display: 'flex' }}>
-                <Card elevation={3} sx={{ width: '100%' }}>
+            <Grid item xs={12} sx={{ flex: 8, display: "flex" }}>
+                <Card elevation={3} sx={{ width: "100%" }}>
                     <CardContent>
                         <Typography variant="h6" gutterBottom>
                             Product List
@@ -138,27 +159,48 @@ function Product() {
                                         <TableCell>Product Name</TableCell>
                                         <TableCell>Stock</TableCell>
                                         <TableCell>Price</TableCell>
+                                        <TableCell>Created Date</TableCell>
+                                        <TableCell>Updated Date</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {products.length > 0 ? (
-                                        products.map((p, index) => (
-                                            <TableRow key={p.id || index}>
-                                                <TableCell>{index + 1}</TableCell>
-                                                <TableCell>{p.name}</TableCell>
-                                                <TableCell>{p.stock}</TableCell>
-                                                <TableCell>{p.price} $</TableCell>
-                                            </TableRow>
-                                        ))
+                                        products
+                                            .slice(
+                                                page * rowsPerPage,
+                                                page * rowsPerPage + rowsPerPage
+                                            )
+                                            .map((p, index) => (
+                                                <TableRow key={p.id || index}>
+                                                    <TableCell>
+                                                        {page * rowsPerPage + index + 1}
+                                                    </TableCell>
+                                                    <TableCell>{p.name}</TableCell>
+                                                    <TableCell>{p.stock}</TableCell>
+                                                    <TableCell>{p.price} $</TableCell>
+                                                    <TableCell>{formatDate(p.createdDate)}</TableCell>
+                                                    <TableCell>{formatDate(p.updatedDate)}</TableCell>
+                                                </TableRow>
+                                            ))
                                     ) : (
                                         <TableRow>
-                                            <TableCell colSpan={4} align="center">
+                                            <TableCell colSpan={6} align="center">
                                                 No products available.
                                             </TableCell>
                                         </TableRow>
                                     )}
                                 </TableBody>
                             </Table>
+                            {/* Pagination */}
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25]}
+                                component="div"
+                                count={products.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                            />
                         </Paper>
                     </CardContent>
                 </Card>
