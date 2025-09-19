@@ -3,9 +3,6 @@ import { Outlet, useLocation } from 'react-router-dom'
 import AdminNavbar from "../components/LayoutComponents/Navbar";
 import Footer from '../components/LayoutComponents/Footer';
 import Spinner from '../../../common/components/Spinner';
-import alertify from "alertifyjs";
-import "alertifyjs/build/css/alertify.css";
-import "alertifyjs/build/css/themes/default.css";
 
 function AdminLayout() {
     const location = useLocation();
